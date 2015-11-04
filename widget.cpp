@@ -26,7 +26,7 @@ void Widget::on_generateButton_clicked()
     QStringList stringContent;
     double rem = 0;
 
-    if(!ui->selectAll->isChecked())
+    if(!ui->selectAll->isChecked())     //adding all unselected options into array
     {
         if(!ui->backgroundPosition->isChecked())
         {
@@ -102,34 +102,34 @@ void Widget::on_generateButton_clicked()
             stringContent = current.split(QRegExp("\\s+"));
             flag = false;
 
-            if(stringContent[0] == "")
+            if(stringContent[0] == "")      //add tabulation for .css file (i use 4 spaces)
             {
                 stringContent[0] = "    ";
             }
 
-            if(uncheckedOptions.length() > 0)
+            if(uncheckedOptions.length() > 0)   //if we have any unchecked options
             {
-                for(int i = 0; i < uncheckedOptions.length(); i++)
+                for(int i = 0; i < uncheckedOptions.length(); i++)  //we compare current option (like width, height, etc) with the array
                 {
                     if(stringContent.value(0).contains(uncheckedOptions.value(i), Qt::CaseInsensitive) || stringContent.value(1).contains(uncheckedOptions.value(i), Qt::CaseInsensitive))
                     {
-                        flag = true;
+                        flag = true;    //and if we should not translate current option
                     }
                 }
             }
 
-            if(!flag)
+            if(!flag)       //we just skip current string
             {
                 for(int i = 0; i < stringContent.length(); i++)
                 {
                     QString temp = stringContent[i];
-                    if(temp.length() >= 3 && temp.right(3) == "px;")
+                    if(temp.length() >= 3 && temp.right(3) == "px;") //if px at the end (like width: 100px;)
                     {
                         temp = temp.remove(temp.length() - 3, 3);
                         rem = temp.toDouble() / 16;
-                        stringContent[i] = ((QString::number(rem, 'f', 4)).remove(QRegExp("0+$"))).remove(QRegExp("\\.$")) + "rem;";
+                        stringContent[i] = ((QString::number(rem, 'f', 4)).remove(QRegExp("0+$"))).remove(QRegExp("\\.$")) + "rem;"; //really difficult to understand translation :)
                     }
-                    else if (temp.length() >= 2 && temp.right(2) == "px")
+                    else if (temp.length() >= 2 && temp.right(2) == "px")   //if px in middle (like border: 1px solid black;)
                     {
                         temp = temp.remove(temp.length() - 2, 2);
                         rem = temp.toDouble() / 16;
